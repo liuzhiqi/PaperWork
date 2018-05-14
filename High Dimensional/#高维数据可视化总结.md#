@@ -1,0 +1,86 @@
+#高维数据可视化
+##数据类型
+###分类
+1. Ordinal：是顺序可以排序的比如你对一个产品的满意度从低到高依次为：非常不满意，不满意，一般，满意，非常满意。  
+2. Nominal：是名目，指不能排序的变量，比如血型，性别，职业。  
+3. Interval：定距尺度变量（间距尺度变量），数据型变量可以求平均，加减，比如温度。  
+4. Ratio：定比变量，拥有零值，及数据间的距离是相等被定义的， 通常指诸如身高、体重、血压等的连续性数据，也包括诸如人数、商品件数等离散型数据，也可以做四则运算。
+
+####Nominal
+对于名目类型的数据由于数据往往并不复杂，而且实际应用过程中并不是主流需要可视化的数据，因此目前对其可视化的方式比较少。对于这一类数据，我们往往很难把他转化成有序的数值型，同时，当这一类数据类目较多时（如职业种类太多样等）也很难对其进行可视化表达。
+
+1. [Mapping Nominal Values to Numbers for Effective Visualization.pdf](./nominal data/Mapping Nominal Values to Numbers for Effective Visualization∗.pdf): Nominal数据转化为numerical数据  
+			对名目数据进行排序，同时减少名目内类目数量，主要使用方法：Distance-Quantification-Classing (DQC) approach方法。核心思想为将Nominal数据转化为numerical数据，主要思路为，对每一个Nominal的维度将其他Nominal维度（n-1个，每个维度有N(i)种可能的取值）内的值展开看做ΣN(i)个特征，利用PCA选取前k个特征，再利用Optimal Scaling的方法利用特征之间的相关性，计算每一个特征对最终numerical数值的贡献值，通过计算得到每个Nominal的numerical值。最后用层次聚类归纳将相似的Nominal合并  
+			ps: 实际操作过程,其实主要用到了距离和相关性的概念，其实可利用其它方法对高维属性直接投影到一维得到一维的numerical值即可（T-sne等方法）
+2. [Parallel Sets: Visual Analysis of Categorical Data.pdf](./nominal data/Parallel Sets: Visual Analysis of Categorical Data.pdf)：平行坐标展示法
+		使用平行坐标对Nominal数据与numerical数据进行展示，由于平行坐标对数据有序性要求较低，因此可以很好的进行展示。  
+	![avatar](./pic/Parallel Sets Visual Analysis of Categorical Data.png)
+
+3. 	[GPLOM: The Generalized Plot Matrix for Visualizing Multidimensional Multivariate Data](./nominal data/GPLOM- The Generalized Plot Matrix for Visualizing Multidimensional Multivariate Data.pdf)：提出了一种如何针对Nominal型数据与numerical类型数据两种异构数据，2X2异构交叉展示的思路，通过逻辑上的排列与特殊的交互，从而实现异构数据以交叉矩阵形式展示的效果。
+	![avatar](./pic/GPLOM.png)
+		
+4. 	[Visual Correlation Analysis of Numerical and Categorical Data on the Correlation Map](./nominal data/Visual Correlation Analysis of Numerical and Categorical Data on the Correlation Map.pdf)：从不同参数之间的相关性角度进行可视化，论文有些综述性质，同时也提出了一些自己的方法。其中2、3、4章很好的总结了nominal变量与numerical变量转化与处理的方式
+		
+
+##维度缩减  
+  维度缩减是在做分析与可视化高维数据集时最基本的工具与手段之一，对维度缩减方法可以简单分为两类：线性维度缩减与非线性维度缩减。其中线性降维具有相对结果具有更强的可解释性，非线性的降维可解释性差，但可以展示复杂结构。
+###线性降维：
+线性投影主要是使用线性变换的方式，将数据从高维空间向低维空间投影。线性投影有很多方法，例如：PCA、MDS（Multidimensional scaling）、LDA（Linear Discriminant Analysis）等
+####PCA
+意在找到一个正交线性变换，使线性投影之后，维度之间的方差最大化，主要利用了到SVD分解的方式求解方差矩阵最大的前k个特征向量，利用特征向量生成线性变化矩阵。  
+[iPCA: An Interactive System for PCA-based Visual Analytics](./Dimension Reduction/iPCA- An Interactive System for PCA-based Visual Analytics.pdf):提出了一个对主成分分析结果的可视化方法，意在帮助用户理解PCA投影过程。  
+####MDS(Multidimensional Scaling)  
+本质上是一个优化问题，优化目标为最小化投影的偏离度。   
+####LDA(Linear Discriminant Analysis)	
+LDA主要用来对有标签数据进行可视化。其本质是一种有监督的线性降维算法,与PCA保持数据信息不同，LDA是为了使得降维后的数据点尽可能地容易被区分。其本质也是一个投影与优化问题，优化目标为：尽可能保证类内间距最小，同时尽可能保证类间间距最大。   
+[Visualization of labeled data using linear transformations.pdf](./Dimension Reduction/Visualization of labeled data using linear transformations.pdf)概况了利用PCA和LDA对有标签数据进行可视化方法。
+###非线性降维：
+####Isomap
+J. B. Tenenbaum, V. De Silva, and J. C. Langford, “A global geo- metric framework for nonlinear dimensionality reduction,” Sci- ence, vol. 290, no. 5500, pp. 2319–2323, 2000.
+####LLE（Locally Linear Embedding)
+S. T. Roweis and L. K. Saul, “Nonlinear dimensionality reduction by locally linear embedding,” Science, vol. 290, no. 5500, pp. 2323–2326, 2000.
+####LE（Laplacian Eigenmap)
+M. Belkin and P. Niyogi, “Laplacian eigenmaps for dimensional- ity reduction and data representation,” Neural Comput., vol. 15, no. 6, pp. 1373–1396, 2003.
+####nonmetric MDS or stress-based MDS 
+
+####t-SNE
+L. v. d. Maaten and G. Hinton, “Visualizing data using t-SNE,” J. Mach. Learn. Res., vol. 9, pp. 2579–2605, 2008.
+
+###control point Based projection
+全局的线性或非线性投影，受到其自身算法的局限，因此往往很难在全局的角度对数据进行抽象，而基于控制点的算法，通过关键节点先投影关键节点，再根据关键节点对拓扑结构进行拓展从而完善整个数据的拓扑结构。这种方法，可以很好的保证局部节点的特征,同时，基于控制点的投影可以很容易的对整个降维过程进行控制与交互（因为操作与分析从集合变成了控制点个体）
+V. De Silva and J. B. Tenenbaum, “Sparse multidimensional scal- ing using landmark points,” Stanford Univ., Stanford, CA, USA, Tech. Rep., 2004.  
+F. Paulovich, C. Silva, and L. Nonato, “Two-phase mapping for projecting massive data sets,” IEEE Trans. Vis. Comput. Graph., vol. 16, no. 6, pp. 1281–1290, Nov./Dec. 2010.  
+F. Paulovich, D. Eler, J. Poco, C. Botha, R. Minghim, and L. Non- ato, “Piece wise laplacian-based projection for interactive data exploration and organization,” Comput. Graph. Forum, vol. 30, no. 3, pp. 1091–1100, 2011.
+
+###Distance Metric:
+现有的降维算法，往往是针对距离这一概念进行维度缩减的，因此，一个合适的距离矩阵，对于整个降维而言是至关重要的，从大多数可视化目的的角度而言，其最终的目标都是揭示重要的结构信息。
+E. T. Brown, J. Liu, C. E. Brodley, and R. Chang, “Dis-function: Learning distance functions interactively,” in Proc. IEEE Conf. Visual Analytics Sci. Technol., 2012, pp. 83–92：通过领域专家或者相关分析人员通过经验或一些预先构想指定数据点轮廓，从而根据这些控制点家算法生成最终的控制矩阵
+
+M. Gleicher, “Explainers: Expert explorations with crafted pro- jections,” IEEE Trans. Vis. Comput. Graph., vol. 19, no. 12, pp. 2042–2051, Dec. 2013.：通过用户指定的具体结构的例子，以线性方法为基础，利用机器学习的方法，对距离结构进行计算、投影与抽象。
+
+J. H. Lee, K. T. McDonnell, A. Zelenyuk, D. Imre, and K. Mueller, “A structure-based distance metric for high-dimensional space exploration with multidimensional scaling,” IEEE Trans. Vis. Comput. Graph., vol. 20, no. 3, pp. 351–364, Mar. 2014. 提出了一种利用MDS来对高维数据空间结构进行探索的方法。
+
+###降维的精确度估计
+对于降维对计算的最终估计结果的评估也是在进行降维时的重要挑战  
+⭐️ J. A. Lee and M. Verleysen, “Quality assessment of dimensional- ity reduction: Rank-based criteria,” Neurocomputing, vol. 72, no. 7, pp. 1431–1443, 2009.通过对降维前后数据的主要差异来对降维的效果分析。  
+☑️yuanxingB. Mokbel, W. Lueks, A. Gisbrecht, and B. Hammer, “Visualizing the quality of dimensionality reduction,” Neurocomputing, vol. 112, pp. 109–123, 2013. 上一篇文章在可视化方向上的引申  
+⭐️ T. Schreck, T. von Landesberger, and S. Bremm, “Techniques for precision-based visual analysis of projected data,” Inf. Vis., vol. 9, no. 3, pp. 181–193, 2010.通过计算每一个点的邻居的大小，从而估计投影的精确度  
+⭐️ S. Liu, B. Wang, P.-T. Bremer, and V. Pascucci, “Distortion-guided structure-driven interactive exploration of high-dimensional data,” Comput. Graph. Forum, vol. 33, no. 3, pp. 101–110, 2014. 列举了多种评估变换扭曲度的方法  
+C. Seifert, V. Sabol, and W. Kienreich, “Stress maps: Analysing local phenomena in dimensionality reduction based visual- isations,” in Proc. IEEE Int. Symp. Visual Analytics Sci. Technol., 2010.：对投影的局部现象进行可视化与分析  
+J. hnke, M. Do€rk, B. Mu€ller, and A. Thom, “Probing projec- tions: Interaction techniques for interpreting arrangements and errors of dimensionality reductions,” IEEE Trans. Vis. Comput. Graph., vol. 22, no. 1, pp. 629–638, Jan. 2016.对全局与局部的精确度准确率进行估计  
+
+##子空间聚类
+ 子空间聚类k
+
+
+
+
+
+
+
+
+#其他
+[Conjunctive Visual Forms](./nominal data/Conjunctive Visual Forms.pdf)：一种将每个维度逻辑上单独看待，冲向维度之间的关系成连接，将过滤抽象成关系的交并补
+			
+			
+
